@@ -22,7 +22,6 @@ type CountsMap = Record<string, Record<string, number>>;
 export default function Home() {
   const [seniority, setSeniority] = useState('');
   const [tech, setTech] = useState('');
-  const [skill, setSkill] = useState('');
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [totalMatches, setTotalMatches] = useState(0);
   const [counts, setCounts] = useState<CountsMap>({});
@@ -47,7 +46,7 @@ export default function Home() {
       setHasSearched(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [seniority, tech, skill]);
+  }, [seniority, tech]);
 
   const fetchCandidates = useCallback(async () => {
     setLoading(true);
@@ -56,7 +55,6 @@ export default function Home() {
       const params = new URLSearchParams();
       if (seniority) params.set('seniority', seniority);
       if (tech) params.set('tech', tech);
-      if (skill) params.set('skill', skill);
 
       const res = await fetch(`/api/candidates?${params.toString()}`);
       const data = await res.json();
@@ -69,7 +67,7 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  }, [seniority, tech, skill]);
+  }, [seniority, tech]);
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
@@ -151,10 +149,8 @@ export default function Home() {
         <FilterBar
           seniority={seniority}
           tech={tech}
-          skill={skill}
           onSeniorityChange={setSeniority}
           onTechChange={setTech}
-          onSkillChange={setSkill}
           onSearch={fetchCandidates}
           loading={loading}
           resultCount={profiles.length}
@@ -214,7 +210,6 @@ export default function Home() {
                   onClick={() => {
                     setSeniority('');
                     setTech('');
-                    setSkill('');
                   }}
                   className="font-mono cursor-pointer hover:opacity-80"
                   style={{ color: 'var(--accent-green)' }}

@@ -7,10 +7,8 @@ type CountsMap = Record<string, Record<string, number>>;
 interface FilterBarProps {
   seniority: string;
   tech: string;
-  skill: string;
   onSeniorityChange: (value: string) => void;
   onTechChange: (value: string) => void;
-  onSkillChange: (value: string) => void;
   onSearch: () => void;
   loading: boolean;
   resultCount: number;
@@ -34,25 +32,6 @@ const TECH_OPTIONS = [
   { value: 'Product', label: 'Product' },
 ];
 
-const SKILL_OPTIONS = [
-  { value: '', label: 'Any Skill' },
-  { value: 'Node.js', label: 'Node.js' },
-  { value: 'React', label: 'React' },
-  { value: 'Python', label: 'Python' },
-  { value: 'TypeScript', label: 'TypeScript' },
-  { value: 'Java', label: 'Java' },
-  { value: 'C#', label: 'C#' },
-  { value: 'Go', label: 'Go' },
-  { value: 'Ruby', label: 'Ruby' },
-  { value: 'Angular', label: 'Angular' },
-  { value: 'Vue', label: 'Vue' },
-  { value: 'AWS', label: 'AWS' },
-  { value: 'Docker', label: 'Docker' },
-  { value: 'Kubernetes', label: 'Kubernetes' },
-  { value: 'PostgreSQL', label: 'PostgreSQL' },
-  { value: 'MongoDB', label: 'MongoDB' },
-];
-
 /** Look up pre-computed count for a tech × seniority combo */
 function getCount(counts: CountsMap, tech: string, seniority: string): number | null {
   return counts[tech]?.[seniority] ?? null;
@@ -61,10 +40,8 @@ function getCount(counts: CountsMap, tech: string, seniority: string): number | 
 export function FilterBar({
   seniority,
   tech,
-  skill,
   onSeniorityChange,
   onTechChange,
-  onSkillChange,
   onSearch,
   loading,
   resultCount,
@@ -140,31 +117,6 @@ export function FilterBar({
           </select>
         </div>
 
-        {/* Skill Select */}
-        <div className="flex-1 min-w-0">
-          <label
-            className="block text-[10px] tracking-[0.15em] uppercase font-mono mb-1.5"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            skill
-          </label>
-          <select
-            value={skill}
-            onChange={(e) => onSkillChange(e.target.value)}
-            className="w-full h-10 px-3 text-sm font-mono rounded-sm border transition-all duration-200"
-            style={{
-              background: 'var(--bg-card)',
-              borderColor: 'var(--border-subtle)',
-              color: 'var(--text-primary)',
-            }}
-          >
-            {SKILL_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
 
       {/* Row 2: Search Button */}
@@ -194,11 +146,6 @@ export function FilterBar({
           style={{ color: 'var(--text-muted)' }}
         >
           {liveCount} candidate{liveCount !== 1 ? 's' : ''} in pool
-          {skill && (
-            <span style={{ color: 'var(--text-muted)', opacity: 0.6 }}>
-              {' '}(before skill filter)
-            </span>
-          )}
         </div>
       )}
 
@@ -209,11 +156,6 @@ export function FilterBar({
           style={{ color: 'var(--accent-green)' }}
         >
           → showing {resultCount} of {totalMatches} matching profile{totalMatches !== 1 ? 's' : ''}
-          {liveCount !== null && liveCount > totalMatches && skill && (
-            <span style={{ color: 'var(--text-muted)' }}>
-              {' '}({liveCount} total in this category)
-            </span>
-          )}
         </div>
       )}
     </div>
